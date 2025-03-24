@@ -1,0 +1,233 @@
+Grammar
+
+    0 $accept: Cal $end
+
+    1 Cal: Cal Exp EOL
+    2    | ε
+
+    3 Exp: DOUBLE
+    4    | INT
+    5    | Exp ADD Exp
+    6    | Exp SUB Exp
+    7    | Exp MUL Exp
+    8    | Exp DIV Exp
+    9    | LP Exp RP
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    INT <type_int> (258) 4
+    DOUBLE <type_double> (259) 3
+    ADD (260) 5
+    SUB (261) 6
+    MUL (262) 7
+    DIV (263) 8
+    LP (264) 9
+    RP (265) 9
+    EOL (266) 1
+
+
+Nonterminals, with rules where they appear
+
+    $accept (12)
+        on left: 0
+    Cal (13)
+        on left: 1 2
+        on right: 0 1
+    Exp <type_double> (14)
+        on left: 3 4 5 6 7 8 9
+        on right: 1 5 6 7 8 9
+
+
+State 0
+
+    0 $accept: • Cal $end
+
+    $default  reduce using rule 2 (Cal)
+
+    Cal  go to state 1
+
+
+State 1
+
+    0 $accept: Cal • $end
+    1 Cal: Cal • Exp EOL
+
+    $end    shift, and go to state 2
+    INT     shift, and go to state 3
+    DOUBLE  shift, and go to state 4
+    LP      shift, and go to state 5
+
+    Exp  go to state 6
+
+
+State 2
+
+    0 $accept: Cal $end •
+
+    $default  accept
+
+
+State 3
+
+    4 Exp: INT •
+
+    $default  reduce using rule 4 (Exp)
+
+
+State 4
+
+    3 Exp: DOUBLE •
+
+    $default  reduce using rule 3 (Exp)
+
+
+State 5
+
+    9 Exp: LP • Exp RP
+
+    INT     shift, and go to state 3
+    DOUBLE  shift, and go to state 4
+    LP      shift, and go to state 5
+
+    Exp  go to state 7
+
+
+State 6
+
+    1 Cal: Cal Exp • EOL
+    5 Exp: Exp • ADD Exp
+    6    | Exp • SUB Exp
+    7    | Exp • MUL Exp
+    8    | Exp • DIV Exp
+
+    ADD  shift, and go to state 8
+    SUB  shift, and go to state 9
+    MUL  shift, and go to state 10
+    DIV  shift, and go to state 11
+    EOL  shift, and go to state 12
+
+
+State 7
+
+    5 Exp: Exp • ADD Exp
+    6    | Exp • SUB Exp
+    7    | Exp • MUL Exp
+    8    | Exp • DIV Exp
+    9    | LP Exp • RP
+
+    ADD  shift, and go to state 8
+    SUB  shift, and go to state 9
+    MUL  shift, and go to state 10
+    DIV  shift, and go to state 11
+    RP   shift, and go to state 13
+
+
+State 8
+
+    5 Exp: Exp ADD • Exp
+
+    INT     shift, and go to state 3
+    DOUBLE  shift, and go to state 4
+    LP      shift, and go to state 5
+
+    Exp  go to state 14
+
+
+State 9
+
+    6 Exp: Exp SUB • Exp
+
+    INT     shift, and go to state 3
+    DOUBLE  shift, and go to state 4
+    LP      shift, and go to state 5
+
+    Exp  go to state 15
+
+
+State 10
+
+    7 Exp: Exp MUL • Exp
+
+    INT     shift, and go to state 3
+    DOUBLE  shift, and go to state 4
+    LP      shift, and go to state 5
+
+    Exp  go to state 16
+
+
+State 11
+
+    8 Exp: Exp DIV • Exp
+
+    INT     shift, and go to state 3
+    DOUBLE  shift, and go to state 4
+    LP      shift, and go to state 5
+
+    Exp  go to state 17
+
+
+State 12
+
+    1 Cal: Cal Exp EOL •
+
+    $default  reduce using rule 1 (Cal)
+
+
+State 13
+
+    9 Exp: LP Exp RP •
+
+    $default  reduce using rule 9 (Exp)
+
+
+State 14
+
+    5 Exp: Exp • ADD Exp
+    5    | Exp ADD Exp •
+    6    | Exp • SUB Exp
+    7    | Exp • MUL Exp
+    8    | Exp • DIV Exp
+
+    MUL  shift, and go to state 10
+    DIV  shift, and go to state 11
+
+    $default  reduce using rule 5 (Exp)
+
+
+State 15
+
+    5 Exp: Exp • ADD Exp
+    6    | Exp • SUB Exp
+    6    | Exp SUB Exp •
+    7    | Exp • MUL Exp
+    8    | Exp • DIV Exp
+
+    MUL  shift, and go to state 10
+    DIV  shift, and go to state 11
+
+    $default  reduce using rule 6 (Exp)
+
+
+State 16
+
+    5 Exp: Exp • ADD Exp
+    6    | Exp • SUB Exp
+    7    | Exp • MUL Exp
+    7    | Exp MUL Exp •
+    8    | Exp • DIV Exp
+
+    $default  reduce using rule 7 (Exp)
+
+
+State 17
+
+    5 Exp: Exp • ADD Exp
+    6    | Exp • SUB Exp
+    7    | Exp • MUL Exp
+    8    | Exp • DIV Exp
+    8    | Exp DIV Exp •
+
+    $default  reduce using rule 8 (Exp)
